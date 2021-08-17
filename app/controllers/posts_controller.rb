@@ -40,16 +40,8 @@ class PostsController < ApplicationController
   end
 
   def swap_words
-    # TODO: fix hyperlink format for views
-    all_keys = Keyword.all.collect(&:key)
-    all_links = Keyword.all.collect(&:link)
-    my_hash = Hash[all_keys.zip(all_links.map { |i| i.split })]
-    my_hash.default_proc = Proc.new {|hash, key| key}
     @post = Post.find(params[:post_id])
-    @post.content = @post.content.to_s.gsub(/[[:word:]]+/).each(&my_hash)
-    @post.content = @post.content.to_s.gsub(/"|\[|\]/, '')
-    @post.content = @post.content.to_s.gsub(URI.regexp, '<a href="\0">\0</a>').html_safe
-    @post.content.save!
+    SwapWords.new(@post).execute
     redirect_to post_path(@post)
   end
 
