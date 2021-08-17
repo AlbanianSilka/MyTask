@@ -81,6 +81,6 @@ test:
 #
 production:
   <<: *default
-  database: mytask_production
-  username: untitled1
-  password: <%= ENV['UNTITLED1_DATABASE_PASSWORD'] %>
+  database: <%= ENV['DATABASE_URL'] %>
+#  username: untitled1
+#  password: <%#= ENV['UNTITLED1_DATABASE_PASSWORD'] %>
