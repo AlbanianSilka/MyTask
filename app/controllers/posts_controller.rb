@@ -46,7 +46,6 @@ class PostsController < ApplicationController
     my_hash = Hash[all_keys.zip(all_links.map { |i| i.split })]
     my_hash.default_proc = Proc.new {|hash, key| key}
     @post = Post.find(params[:post_id])
-    @post.content = 'Utah is the best country in the world'
     @post.content = @post.content.to_s.gsub(/[[:word:]]+/).each(&my_hash)
     @post.content = @post.content.to_s.gsub(/"|\[|\]/, '')
     @post.content = @post.content.to_s.gsub(URI.regexp, '<a href="\0">\0</a>').html_safe
