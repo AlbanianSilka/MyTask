@@ -7,9 +7,12 @@ class SwapWords
   end
 
   def execute
-    all_keys = Keyword.all.pluck(:key, :link)
+    all_keys = Keyword.all.pluck(:key, :link).to_h.transform_keys(&:downcase)
     new_content = @post.content.to_s
-    all_keys.map { |key, link| new_content.gsub!(key, "<a href='#{link}'>#{key}</a>") }
+    new_content.gsub!(/\w+/) do |word|
+      url = all_keys[word.downcase]
+      url ? "<a href='#{url}'>#{word}</a>" : word
+    end
     @post.content = new_content
     @post.save!
   end
