@@ -31,7 +31,9 @@ class PostsController < ApplicationController
     end
   end
 
-  def edit; end
+  def edit
+    @post.swap_content = @post.swap_content.to_plain_text
+  end
 
   def destroy
     @post.destroy
@@ -48,7 +50,7 @@ class PostsController < ApplicationController
   private
 
   def post_params
-    params.require(:post).permit(:title, :content)
+    params.require(:post).permit(:title, :content, :swap_content)
   end
 
   def find_post
