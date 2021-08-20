@@ -44,13 +44,13 @@ class PostsController < ApplicationController
   def swap_words
     @post = Post.find(params[:post_id])
     SwapWords.new(@post).execute
-    redirect_to post_path(@post)
+    redirect_to post_path(@post), alert: 'Post has been successfully updated'
   end
 
   private
 
   def post_params
-    params.require(:post).permit(:title, :content, :swap_content)
+    params.require(:post).permit(:title, :content, :swap_content, :swap_limit, :swap_limit_counter)
   end
 
   def find_post
