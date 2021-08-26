@@ -18,16 +18,22 @@ class SwapWords
       end
       all_keys = Keyword.all.pluck(:key, :link).to_h.transform_keys(&:downcase)
       all_keys.each do |key, value|
-        count_links = @post.swap_content.to_s.scan(/<a href='#{value}'>#{key}<\/a>/i).size
+        count_links = @post.swap_content.to_s.scan(%r{<a href='#{value}'>#{key}</a>}i).size
         next if count_links >= 2
 
         if count_links == 1
           if @post.swap_content.to_s.scan(/#{key}\s|\s#{key}|\s#{key}\s/i).size.positive?
-            @post.swap_content = @post.swap_content.to_s.sub(/#{key}\s|\s#{key}|\s#{key}\s/i) {"<a href='#{value}'>#{key.capitalize}</a>"}
+            @post.swap_content = @post.swap_content.to_s.sub(/#{key}\s|\s#{key}|\s#{key}\s/i) do
+              "<a href='#{value}'>#{key.capitalize}</a>"
+            end
           end
         else
-          @post.swap_content = @post.swap_content.to_s.sub(/#{key}\s|\s#{key}|\s#{key}\s/i) {" <a href='#{value}'>#{key.capitalize}</a> "}
-          @post.swap_content = @post.swap_content.to_s.sub(/#{key}\s|\s#{key}|\s#{key}\s/i) {" <a href='#{value}'>#{key.capitalize}</a> "}
+          @post.swap_content = @post.swap_content.to_s.sub(/#{key}\s|\s#{key}|\s#{key}\s/i) do
+            " <a href='#{value}'>#{key.capitalize}</a>"
+          end
+          @post.swap_content = @post.swap_content.to_s.sub(/#{key}\s|\s#{key}|\s#{key}\s/i) do
+            " <a href='#{value}'>#{key.capitalize}</a>"
+          end
         end
       end
       @post.swap_content
