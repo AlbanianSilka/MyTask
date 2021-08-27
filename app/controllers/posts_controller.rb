@@ -32,7 +32,6 @@ class PostsController < ApplicationController
   end
 
   def edit
-    @post.swap_content = @post.swap_content.to_plain_text
   end
 
   def destroy
