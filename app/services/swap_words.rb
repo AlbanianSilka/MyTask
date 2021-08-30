@@ -9,37 +9,35 @@ class SwapWords
     @post = post
   end
 
-  def execute
+  def execute(string)
     if @post.swap_limit_counter < @post.swap_limit
       begin
-        @post.swap_content = @post.swap_content.to_plain_text.delete!("\n").strip
+        string = string.to_plain_text.delete!("\n").strip
       rescue NoMethodError
         nil
       end
       all_keys = Keyword.all.pluck(:key, :link).to_h.transform_keys(&:downcase)
       all_keys.each do |key, value|
-        count_links = @post.swap_content.to_s.scan(%r{<a href='#{value}'>#{key}</a>}i).size
+        count_links = string.to_s.scan(%r{<a href='#{value}'>#{key}</a>}i).size
         next if count_links >= 2
 
         if count_links == 1
-          if @post.swap_content.to_s.scan(/#{key}\s|\s#{key}|\s#{key}\s/i).size.positive?
-            @post.swap_content = @post.swap_content.to_s.sub(/#{key}\s|\s#{key}|\s#{key}\s/i) do
+          if string.to_s.scan(/#{key}\s|\s#{key}|\s#{key}\s/i).size.positive?
+            string = string.to_s.sub(/#{key}\s|\s#{key}|\s#{key}\s/i) do
               "<a href='#{value}'>#{key.capitalize}</a>"
             end
           end
         else
-          @post.swap_content = @post.swap_content.to_s.sub(/#{key}\s|\s#{key}|\s#{key}\s/i) do
+          string = string.to_s.sub(/#{key}\s|\s#{key}|\s#{key}\s/i) do
             " <a href='#{value}'>#{key.capitalize}</a>"
           end
-          @post.swap_content = @post.swap_content.to_s.sub(/#{key}\s|\s#{key}|\s#{key}\s/i) do
+          string = string.to_s.sub(/#{key}\s|\s#{key}|\s#{key}\s/i) do
             " <a href='#{value}'>#{key.capitalize}</a>"
           end
         end
       end
-      @post.swap_content
-      @post.content = @post.swap_content.to_plain_text.delete!("\n").strip
-      @post.swap_limit_counter = @post.swap_limit_counter + 1
-      @post.save!
+      string
+      # @post.swap_limit_counter = @post.swap_limit_counter + 1
     end
   end
 end
