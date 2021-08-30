@@ -6,7 +6,7 @@
       <div class="alert"><%= flash[:alert] %></div>
     <% end %>
     <h1 class="title">
-      <%= @post.title %>
+<%= @facade.title %>
     </h1>
     <nav class="level">
       <div class="level-left">
@@ -37,7 +37,7 @@
     <hr />
 
     <div class="content">
-      <%= @post.swap_content %>
+      <%= @facade.description_with_link.html_safe %>
     </div>
   </div>
   <%= link_to 'Back', posts_path %>
