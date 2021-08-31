@@ -14,10 +14,14 @@ class PostsController < ApplicationController
 
   def create
     @post = Post.new(post_params)
-    if @post.save
-      redirect_to @post
-    else
-      render new
+    respond_to do |format|
+      if @post.save
+        format.html { redirect_to @post, notice: 'Your post was successfully created.' }
+        format.json { render :show, status: :created, location: @post }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @post.errors, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -33,8 +37,7 @@ class PostsController < ApplicationController
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def destroy
     @post.destroy
