@@ -2,6 +2,7 @@
 
 # class to describe the actual posts model
 class Post < ApplicationRecord
+  validates :title, :content, presence: true
   validate :non_zero
   has_rich_text :content
 
