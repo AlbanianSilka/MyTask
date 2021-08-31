@@ -1,5 +1,6 @@
-# TODO `<main>': uninitialized constant PostsFacade (NameError) - fix this error
+# frozen_string_literal: true
 
+# Facade class for posts controller
 class PostsFacade
   attr_reader :post
 
@@ -11,12 +12,7 @@ class PostsFacade
     @post.title
   end
 
-  def big_title
-    @post.title.capitalize
-  end
-
   def description_with_link
     @post.content = SwapWords.new(@post).execute(@post.content)
   end
-
 end
